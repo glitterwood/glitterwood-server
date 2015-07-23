@@ -7,9 +7,14 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "arpad": "^0.1.0",
+    "body-parser": "^1.13.2",
     "cors": "^2.7.1",
     "ejs": "^2.3.1",
-    "express": "~4.9.x"
+    "express": "~4.9.x",
+    "lodash": "^3.10.0",
+    "mongoose": "^4.0.8",
+    "multer": "^1.0.1"
   },
   "engines": {
     "node": "0.12.2"
