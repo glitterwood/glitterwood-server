@@ -7,4 +7,4 @@ var schema = {
 
 var Players = mongoose.model('players', schema);
 
-return Players;
+module.exports = Players;
