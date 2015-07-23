@@ -16,7 +16,7 @@ Game History</span></h1>
           ng-if="!$last">, </span></div>
         </div>
         <div flex="35">
-          <b>Losers:</b> <div ng-repeat="winner in winners(game) track by $index">{{ winner}}<span
+          <b>Losers:</b> <div ng-repeat="loser in losers(game) track by $index">{{ loser}}<span
           ng-if="!$last">, </span></div>
         </div>
       </div>
@@ -29,7 +29,7 @@ Game History</span></h1>
         ng-if="!$last">, </span></span>
       </h4>
 
-      <p>{ <b>Losers:</b> <span ng-repeat="winner in winners(game) track by $index">{{ winner}}<span
+      <p>{ <b>Losers:</b> <span ng-repeat="loser in losers(game) track by $index">{{ loser}}<span
         ng-if="!$last">, </span></span>
       </p>
     </div>
