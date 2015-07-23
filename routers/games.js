@@ -3,7 +3,7 @@ var router = express.Router();
 var _ = require('lodash');
 var Games = require('./../models/games');
 
-var allocateGameResults = allocateGameResults('./../lib/allocateGameResults');
+var allocateGameResults = require('./../lib/allocateGameResults');
 
 function _sanitizeTeam(teamList) {
   return _.reduce(teamList, function (out, team) {
