@@ -1,0 +1,33 @@
+<h1 hide-sm hide-md class="md-display-3" layout layout-align="center center"><span>
+Players</span></h1>
+<h1 hide-gt-md class="md-display-1" layout layout-align="center center"><span>
+Players</span></h1>
+
+<md-button class="md-raised md-primary" ng-click="createPlayer()">
+  Create Player
+</md-button>
+
+<md-button ng-click="purgePlayers()" class="md-raised md-warn">Destroy ALL Players </md-button>
+
+<md-content layout-padding ng-if="newPlayer">
+  <form name="userForm">
+    <div layout layout-sm="column">
+      <md-input-container style="max-width: 20rem">
+        <label>Name</label>
+        <input ng-model="newPlayer.name" required>
+      </md-input-container>
+      <div flex>
+        <md-button class="md-raised md-primary" ng-click="addPlayer()">
+          Save Player
+        </md-button>
+      </div>
+    </div>
+  </form>
+</md-content>
+
+<md-list ng-if="players.length">
+  <md-subheader class="md-no-sticky">Players</md-subheader>
+  <md-list-item ng-repeat="player in players">
+    <p> {{ player.name }} </p>
+  </md-list-item>
+</md-list>

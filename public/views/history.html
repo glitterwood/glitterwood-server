@@ -1,0 +1,38 @@
+<h1 hide-sm hide-md class="md-display-3" layout layout-align="center center"><span>
+Game History</span></h1>
+<h1 hide-gt-md class="md-display-1" layout layout-align="center center"><span>
+Game History</span></h1>
+
+<md-content>
+
+  <md-list>
+    <md-list-item ng-repeat="game in games | orderBy: 'time': true" hide-sm hide-md>
+      <div layout="row" layout-fill style="max-width: 60rem">
+        <div flex>
+          {{ toDate(game.date) | date:'medium' }}
+        </div>
+        <div flex="35">
+          <b>Winners:</b> <div ng-repeat="winner in winners(game) track by $index">{{ winner}}<span
+          ng-if="!$last">, </span></div>
+        </div>
+        <div flex="35">
+          <b>Losers:</b> <div ng-repeat="winner in winners(game) track by $index">{{ winner}}<span
+          ng-if="!$last">, </span></div>
+        </div>
+      </div>
+    </md-list-item>
+  </md-list>
+  <md-list-item ng-repeat="game in games | orderBy: 'time': true" hide-gt-md class="md-3-line">
+    <div class="md-list-item-text">
+      <h3> {{ toDate(game.date) | date:'medium' }}</h3>
+      <h4><b>Winners:</b> <span ng-repeat="winner in winners(game) track by $index">{{ winner}}<span
+        ng-if="!$last">, </span></span>
+      </h4>
+
+      <p>{ <b>Losers:</b> <span ng-repeat="winner in winners(game) track by $index">{{ winner}}<span
+        ng-if="!$last">, </span></span>
+      </p>
+    </div>
+  </md-list-item>
+  </md-list>
+</md-content>

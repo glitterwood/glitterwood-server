@@ -1,0 +1,76 @@
+<div class="foosball-frame" style="height: 100%" layout="row" layout-fill layout-align="center center" hide-sm hide-md>
+  <div class="foosball-table" layout="column">
+    <div class="player-row team-1 {{winClass1}}" flex="20" layout="row" layout-align="start center" layout-padding
+         >
+      <div class="team-select" flex>
+        <md-button class="md-fab md-primary md-hue-2" aria-label="Team 1" ng-click="selectTeam(1)">
+          <md-icon md-svg-src="/images/choose-arrow.svg"></md-icon>
+        </md-button>
+      </div>
+      <table-player-slot ng-repeat="slot in topSlots" slot="slot" flex="25">
+      </table-player-slot>
+    </div>
+    <div flex class="field" layout layout-align="center center">
+      <div class="winner" ng-if="winningTeamNumber" flex="80">
+        Winner: Team {{winningTeamNumber}}!
+        <div>
+          <md-button class="md-raised md-primary" ng-click="saveGame()">Save Game</md-button>
+        </div>
+      </div>
+      <div class="instructions" ng-if="!winningTeamNumber">
+        <p layout layout-align="center center"><span>Set the names of the people on each side
+  then click one of the two circular buttons to choose the winning team.</span></p>
+      </div>
+    </div>
+    <div class="player-row team-2 {{winClass2}}" flex="20" layout="row" layout-align="start center" layout-padding>
+      <div class="team-select" flex>
+        <md-button class="md-fab md-primary md-hue-2" aria-label="Team 2" ng-click="selectTeam(2)">
+          <md-icon md-svg-src="/images/choose-arrow.svg"></md-icon>
+        </md-button>
+      </div>
+      <table-player-slot ng-repeat="slot in bottomSlots" slot="slot" flex="25">
+      </table-player-slot>
+    </div>
+  </div>
+</div>
+
+<md-content layout="column" layout-fill hide-gt-md class="team-1 team-small {{winClass1}}">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <md-button class="md-fab md-primary md-hue-2" aria-label="Team 1" ng-click="selectTeam(1)">
+        <md-icon md-svg-src="/images/choose-arrow.svg"></md-icon>
+      </md-button>
+      <h2>
+        <span>Team 1</span>
+      </h2>
+      <span flex></span>
+    </div>
+  </md-toolbar>
+  <md-list>
+    <md-list-item ng-repeat="slot in topSlots">
+      <table-player-slot slot="slot"></table-player-slot>
+    </md-list-item>
+  </md-list>
+</md-content>
+
+<md-content layout="column" layout-fill hide-gt-md class="team-2 team-small {{winClass2}}">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <md-button class="md-fab md-primary md-hue-2" aria-label="Team 2" ng-click="selectTeam(2)">
+        <md-icon md-svg-src="/images/choose-arrow.svg"></md-icon>
+      </md-button>
+      <h2>
+        <span>Team 2</span>
+      </h2>
+      <span flex></span>
+    </div>
+  </md-toolbar>
+  <md-list>
+    <md-list-item ng-repeat="slot in bottomSlots">
+      <table-player-slot slot="slot"></table-player-slot>
+    </md-list-item>
+    <md-list-item ng-if="winningTeamNumber">
+      <md-button class="md-raised md-primary" ng-click="saveGame()">Save Game</md-button>
+    </md-list-item>
+  </md-list>
+</md-content>
