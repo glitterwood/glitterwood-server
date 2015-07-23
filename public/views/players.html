@@ -7,14 +7,14 @@ Players</span></h1>
   Create Player
 </md-button>
 
-<md-button ng-click="purgePlayers()" class="md-raised md-warn">Destroy ALL Players </md-button>
+<md-button ng-if="false" ng-click="purgePlayers()" class="md-raised md-warn">Destroy ALL Players </md-button>
 
 <md-content layout-padding ng-if="newPlayer">
   <form name="userForm">
     <div layout layout-sm="column">
       <md-input-container style="max-width: 20rem">
         <label>Name</label>
-        <input ng-model="newPlayer.name" required>
+        <input class="avatar-upload" ng-model="newPlayer.name" required>
       </md-input-container>
       <div flex>
         <md-button class="md-raised md-primary" ng-click="addPlayer()">
@@ -23,6 +23,7 @@ Players</span></h1>
       </div>
     </div>
   </form>
+  <input type="hidden" ng-model="newPlayer.avatarImage" class="avaar-upload-data" />
 </md-content>
 
 <md-list ng-if="players.length">
