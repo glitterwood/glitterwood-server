@@ -3,9 +3,9 @@
   your browser</a> to improve your experience.</p>
 <![endif]--> <!-- Add your site or application content here --> <md-toolbar hide-gt-md> <div class="md-toolbar-tools"> <md-button class="md-icon-button" ng-click="toggleLeft()" aria-label="Settings"> <i class="fa fa-ellipsis-v"></i> </md-button> <h2> <span>Lumiata-foosball</span> </h2> <span flex></span> </div> </md-toolbar> <section flex layout="row"> <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')"> <md-toolbar class="md-theme-indigo"> <h1 class="md-toolbar-tools">Sidenav Left</h1> </md-toolbar> <md-content layout-padding ng-controller="LeftCtrl"> <md-button ng-click="close()" class="md-primary" hide-gt-md> Close Sidenav Left </md-button> <md-list> <md-list-item> <md-button href="#/">Home</md-button> </md-list-item> <md-list-item> <md-button href="#players">Players</md-button> </md-list-item> </md-list> </md-content> </md-sidenav> <div ng-view="" flex></div> </section> <!-- Google Analytics: change UA-XXXXX-X to be your site's ID --> <script>!function (A, n, g, u, l, a, r) {
     A.GoogleAnalyticsObject = l, A[l] = A[l] || function () {
-              (A[l].q = A[l].q || []).push(arguments)
-            }, A[l].l = +new Date, a = n.createElement(g),
-            r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
+        (A[l].q = A[l].q || []).push(arguments)
+      }, A[l].l = +new Date, a = n.createElement(g),
+      r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
   }(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
   ga('create', 'UA-XXXXX-X');
