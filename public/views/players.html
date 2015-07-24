@@ -3,32 +3,44 @@ Players</span></h1>
 <h1 hide-gt-md class="md-display-1" layout layout-align="center center"><span>
 Players</span></h1>
 
-<md-button class="md-raised md-primary" ng-click="createPlayer()">
-  Create Player
-</md-button>
+<md-button ng-if="false" ng-click="purgePlayers()" class="md-raised md-warn">Destroy ALL Players</md-button>
 
-<md-button ng-if="false" ng-click="purgePlayers()" class="md-raised md-warn">Destroy ALL Players </md-button>
+<md-card class="new-player-form" style="max-width: 60rem">
+  <md-toolbar>
+    <h3 layout layout-align="center center" class="md-headline"><span>Add a player to the registry</span></h3>
+  </md-toolbar>
+  <md-card-content>
+    <form name="newPlayerForm" enctype="multipart/form-data">
+      <div layout layout-sm="column" layout-padding layout-fill>
+        <md-input-container flex style="max-width: 30rem">
+          <label>Name</label>
+          <input ng-model="newPlayer.name" required>
+        </md-input-container>
 
-<md-content layout-padding ng-if="newPlayer">
-  <form name="userForm">
-    <div layout layout-sm="column">
-      <md-input-container style="max-width: 20rem">
-        <label>Name</label>
-        <input class="avatar-upload" ng-model="newPlayer.name" required>
-      </md-input-container>
-      <div flex>
-        <md-button class="md-raised md-primary" ng-click="addPlayer()">
-          Save Player
-        </md-button>
+        <div flex="40">
+          <div>Avatar (optional)</div>
+          <avatar-upload></avatar-upload>
+        </div>
       </div>
-    </div>
-  </form>
-  <input type="hidden" ng-model="newPlayer.avatarImage" class="avaar-upload-data" />
-</md-content>
+    </form>
+  </md-card-content>
+  <div class="md-actions" layout="row" layout-padding layout-align="end center">
+    <md-button class="md-raised md-primary" ng-click="addPlayer()">
+      Save Player
+    </md-button>
+  </div>
+</md-card>
 
 <md-list ng-if="players.length">
   <md-subheader class="md-no-sticky">Players</md-subheader>
   <md-list-item ng-repeat="player in players">
-    <p> {{ player.name }} </p>
+    <p layout="row" layout-padding>
+        <span flex style="min-width:10rem">
+          {{ player.name }} ({{ player.rank }}) -- {{player.games.length }} games
+        </span>
+        <span style="width: 10rem">
+          <md-button class="md-raised" href="#/players/{{ player._id}}">Detail</md-button>
+        </span>
+    </p>
   </md-list-item>
 </md-list>

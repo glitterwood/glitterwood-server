@@ -1,0 +1,6 @@
+<div class="inner" ng-class="{duplicate: slot.duplicate, 'md-whiteframe-z3': raised }">
+  <md-select ng-if="players" ng-model="slot.player" md-on-close="updateGame()">
+    <md-option value="(none)">(None)</md-option>
+    <md-option ng-repeat="player in players" value="{{player.name}}">{{player.name}}</md-option>
+  </md-select>
+</div>
