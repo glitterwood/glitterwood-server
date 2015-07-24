@@ -33,12 +33,13 @@ router.post('/', function (req, res) {
   }
   data.team1 = _sanitizeTeam(data.team1);
   data.team2 = _sanitizeTeam(data.team2);
+  data.players = _.uniq(data.team1.concat(data.team2));
 
   new Games(data).save(function (err, result) {
     if (err) {
       return res.status(400).send({error: 'bad data'});
     }
-    allocateGameResults(result);
+    result.updatePlayerRanks();
     res.send(result);
   })
 });

@@ -28,5 +28,9 @@
     "heroku",
     "express"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "mocha": "^2.2.5"
+  }
 }

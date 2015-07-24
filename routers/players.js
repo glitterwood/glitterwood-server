@@ -10,7 +10,6 @@ router.get('/', function (req, res) {
     if (err) {
       return res.status(400).send(err);
     }
-    console.log('returning ', players.length, 'players');
     players = players.map(function (p) {
       var out = p.toJSON();
       if (p.avatar) {
@@ -19,6 +18,21 @@ router.get('/', function (req, res) {
       return out;
     });
     res.send(players);
+  });
+});
+router.get('/:id', function (req, res) {
+  Players.findOne({_id: req.params.id}, function (err, player) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+    if (!player){
+      return res.status(404).send({errror: 'no player with id ' + req.query.id})
+    }
+    var out = player.toJSON();
+    if (player.avatar) {
+      out.avatar = player.avatar.toString();
+    }
+    res.send(player);
   });
 });
 
@@ -48,7 +62,6 @@ router.post('/', multer().single('avatar-file'), function (req, res) {
     } else if (result.length) {
       res.status(409).send({error: 'name already exists', name: data.name});
     } else {
-      console.log('req.body:', req.body);
       new Players(data).save(function (err, newRecord) {
         if (err) {
           res.status(500).send(err);
