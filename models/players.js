@@ -15,12 +15,18 @@ var schema = new mongoose.Schema({
   ]
 });
 
-schema.methods.updateRank = function (change) {
-  console.log('adding game ', change.game, 'for player ', this.name);
+schema.methods.updateRank = function (change, done) {
   this.games.push(change);
   this.rank = change.newRank;
   this.markModified('games');
-  this.save();
+  this.save(done);
+};
+
+schema.methods.clearHistory = function (done) {
+  this.games = [];
+  this.rank = 1200;
+  this.markModified('games');
+  this.save(done);
 };
 
 var Players = mongoose.model('players', schema);

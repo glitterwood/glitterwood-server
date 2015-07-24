@@ -40,20 +40,21 @@ describe('games', function () {
       done();
     })
   });
-  var game;
 
-  beforeEach(function (done) {
-    game = new Games({
-      team1: ['Alpha'],
-      team2: ['Beta'],
-      players: ['Alpha', 'Beta'],
-      winner: 2
+  it('#save', function () {
+    var game;
+
+    beforeEach(function (done) {
+      game = new Games({
+        team1: ['Alpha'],
+        team2: ['Beta'],
+        players: ['Alpha', 'Beta'],
+        winner: 2
+      });
+
+      game.save(done);
     });
 
-    game.save(done);
-  });
-
-  it('#save', function(){
     it('should create a valid game', function (done) {
       Games.find({}, function (err, games) {
         expect(games.length).to.be(1);
@@ -62,44 +63,69 @@ describe('games', function () {
     });
   });
 
-  describe('#updatePlayerRanks', function (done) {
+  describe('#updatePlayerRanks', function () {
+    var game;
 
-    it('should update player ranks', function(){
-      game.updatePlayerRanks();
-      Players.findOne({name: 'Alpha'}, function(err, alpha){
-        var newRank = elo.newRatingIfLost(1200, 1200);
-        expect(alpha.games.length).to.be(1);
-        expect(alpha.rank).to.be(newRank);
-        Players.findOne({name: 'Beta'}, function(err, beta){
-          var newRank = elo.newRatingIfWon(1200, 1200);
-          expect(beta.games.length).to.be(1);
-          expect(beta.rank).to.be(newRank);
-        })
-      });
-    });
-
-    it('should handle multiple players in teams', function(){
-    var  game = new Games({
-        team1: ['Alpha', 'Gamma'],
-        team2: ['Beta', 'Delta'],
-        players: ['Alpha', 'Beta', 'Gamma'],
+    beforeEach(function (done) {
+      game = new Games({
+        team1: ['Alpha'],
+        team2: ['Beta'],
+        players: ['Alpha', 'Beta'],
         winner: 2
       });
 
       game.save(done);
-      game.updatePlayerRanks();
-      Players.findOne({name: 'Alpha'}, function(err, alpha){
-        var newRank = elo.newRatingIfLost(1200, 1200);
-        expect(alpha.games.length).to.be(1);
-        expect(alpha.rank).to.be(newRank);
-        Players.findOne({name: 'Gamma'}, function(err, gamma){
-          var newRank = elo.newRatingIfWon(1400, 1200);
-          expect(gamma.games.length).to.be(1);
-          expect(gamma.rank).to.be(newRank);
-        })
+    });
+
+    it('should update player ranks', function (done) {
+      game.updatePlayerRanks(function () {
+        Players.findOne({name: 'Alpha'}, function (err, alpha) {
+          var newRank = elo.newRatingIfLost(1200, 1200);
+          expect(alpha.games.length).to.be(1);
+          expect(alpha.rank).to.be(newRank);
+
+          Players.findOne({name: 'Beta'}, function (err, beta) {
+            var newRank = elo.newRatingIfWon(1200, 1200);
+            expect(beta.games.length).to.be(1);
+            expect(beta.rank).to.be(newRank);
+            done();
+          })
+        });
       });
     });
 
+    it('should handle multiple players in teams', function (done) {
+      var game = new Games({
+        team1: ['Alpha', 'Gamma'],
+        team2: ['Beta', 'Delta'],
+        players: ['Alpha', 'Beta', 'Gamma', 'Delta'],
+        winner: 2
+      });
+
+      game.save(function () {
+        game.updatePlayerRanks(function () {
+          Players.findOne({name: 'Alpha'}, function (err, alpha) {
+            var newRank = elo.newRatingIfLost(1200, 1200);
+            expect(alpha.games.length).to.be(1);
+            expect(alpha.rank).to.be(newRank);
+            Players.findOne({name: 'Gamma'}, function (err, gamma) {
+              var newRank = elo.newRatingIfLost(1400, 1200);
+              expect(gamma.games.length).to.be(1);
+              expect(gamma.rank).to.be(newRank);
+              done();
+            })
+          });
+        });
+
+      });
+    });
+
+  });
+
+  describe('#screwWithTime', function () {
+    beforeEach(function (done) {
+
+    })
   });
 
 });

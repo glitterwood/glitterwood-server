@@ -11,15 +11,80 @@ var schema = new mongoose.Schema({
   winner: 'number'
 });
 
+schema.static.getLatest = function (callback) {
+  Games.findOne({}, null, {
+    sort: {
+      date: -1
+    }
+  }, callback);
+};
+
+schema.static.screwWithTime = function (done) {
+  var tasks;
+
+  function _endTask() {
+    --tasks;
+    if (tasks <= 0 && done) {
+      done();
+      done = null;
+    }
+  }
+
+  Games.getLatest(function (err, latest) {
+    if (err) {
+      return done(err);
+    }
+    if (!latest) {
+      return done(null, 'no games exist to screw with');
+    }
+
+    var now = new Date();
+    if (latest.date.getTime() < now.getTime()) {
+      return done(null, 'no games exist in the future');
+    }
+
+    var shift = -(latest.date.getTime() - now.getTime());
+
+    Games.find({}, function (err, games) {
+      var Players = require('./players');
+      Players.find({}, function (err, players) {
+        tasks = games.length + players.length;
+        games.forEach(function (game) {
+          game.date = new Date(game.date.getTime() + shift);
+          game.markModified('date');
+          game.save(_endTask);
+        });
+
+        players.forEach(function (player) {
+          player.games.forEach(function (game) {
+            game.date = new Date(game.date.getTime() + shift);
+          });
+          player.markModified('games');
+          player.save(_endTask)
+        });
+      });
+    });
+  });
+};
+
 schema.methods.getPlayers = function (callback) {
   var Players = require('./players');
   Players.find({name: {$in: this.players}}, callback);
 };
 
-schema.methods.updatePlayerRanks = function () {
+schema.methods.updatePlayerRanks = function (done) {
+
+  var tasks = 0;
+  function _endTask(){
+    --tasks;
+    if (tasks <= 0 && done){
+      done();
+      done = null;
+    }
+  }
+
   var game = this;
   this.getPlayers(function (err, players) {
-
     players.forEach(function (player) {
       if (!player.rank || isNaN(player.rank)) {
         player.rank = 1200;
@@ -33,13 +98,6 @@ schema.methods.updatePlayerRanks = function () {
     var winners = _namesToPlayers(game['team' + game.winner], playersIndex);
     var losers = _namesToPlayers(game.winner === 1 ? game.team2 : game.team1, playersIndex);
 
-    console.log('game', game);
-    console.log('winners: ', winners.map(function(p){
-      return p.name;
-    }));
-    console.log('losers: ', losers.map(function(p){
-      return p.name;
-    }));
     var bestWinnerScore = _bestScore(winners);
     var bestLoserScore = _bestScore(losers);
 
@@ -53,14 +111,18 @@ schema.methods.updatePlayerRanks = function () {
       nextEffects.push(_gameUpdate(loser, game, rank, false));
     });
 
+    tasks = nextEffects.length;
     nextEffects.forEach(function (change) {
-      change.player.updateRank(change);
+      change.player.updateRank(change, _endTask);
     });
   });
 };
 
 function _namesToPlayers(nameStrings, index) {
   return nameStrings.map(function (name) {
+    if (!index[name]){
+      throw new Error('no ' + name + ' in index ' + util.inspect(index));
+    }
     return index[name];
   });
 }
@@ -86,7 +148,14 @@ function _playersByName(players) {
 }
 
 function _bestScore(players) {
+  if (players.length === 0) {
+    return 0;
+  }
   return _.reduce(players, function (bestScore, player) {
+    if (!player) {
+      console.log('bad players:', players);
+      throw new Error('players has an empty record, ');
+    }
     return Math.max(bestScore, player.rank);
   }, 0);
 }

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var _ = require('lodash');
 var Games = require('./../models/games');
+var Players = require('./../models/players');
 
 var allocateGameResults = require('./../lib/allocateGameResults');
 
@@ -14,16 +15,14 @@ function _sanitizeTeam(teamList) {
   }, []);
 }
 
-router.delete('/:id?',
+router.delete('/all',
   function (req, res) {
     var id = req.params.id;
-    if (id == 'all') {
-      Games.collection.remove(function () {
-        res.send({removed: 'all'});
+    Games.collection.remove(function () {
+      Players.collection.remove(function () {
+        res.send({result: 'its all gone'});
       })
-    } else {
-      res.status(400).send({error: 'not done yet'});
-    }
+    });
   });
 
 router.post('/', function (req, res) {
@@ -44,12 +43,32 @@ router.post('/', function (req, res) {
   })
 });
 
-router.get('/', function(req, res){
-  Games.find({}, function(err, games){
-    if (err){
+router.get('/', function (req, res) {
+  Games.find({}, function (err, games) {
+    if (err) {
       return res.status(500).send({error: 'bad data'});
     }
     res.send(games);
+  });
+});
+
+router.get('/latest', function (req, res) {
+  games.getLatest(function (err, game) {
+      console.log('got the latest', game);
+      if (err) {
+        return res.status(500).send({error: err});
+      }
+      if (!game) {
+        return res.status(404).send({error: 'no games'})
+      }
+      res.send(game);
+    }
+  );
+});
+
+router.post('/screwWithTime', function (req, res) {
+  Games.screwWithTime(function () {
+    res.send({timeScrewedWith: true});
   });
 });
 
