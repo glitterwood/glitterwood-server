@@ -22,12 +22,20 @@ schema.methods.updateRank = function (change, done) {
   this.save(done);
 };
 
+schema.statics.getName = function(name, callback){
+  Players.findOne({name: name}, callback);
+};
+
 schema.methods.clearHistory = function (done) {
   this.games = [];
   this.rank = 1200;
   this.markModified('games');
   this.save(done);
 };
+
+schema.post('save', function(next){
+  //console.log('player', this.name, 'has ', this.games.length, 'games');
+});
 
 var Players = mongoose.model('players', schema);
 

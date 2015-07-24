@@ -11,7 +11,7 @@ var schema = new mongoose.Schema({
   winner: 'number'
 });
 
-schema.static.getLatest = function (callback) {
+schema.statics.getLatest = function (callback) {
   Games.findOne({}, null, {
     sort: {
       date: -1
@@ -19,7 +19,18 @@ schema.static.getLatest = function (callback) {
   }, callback);
 };
 
-schema.static.screwWithTime = function (done) {
+function _cleanupLists(next) {
+  this.team1 = _(this.team1).uniq().compact().value();
+  this.team2 = _(this.team2).uniq().compact().value();
+
+  this.players = _(this.team1.concat(this.team2)).uniq().compact().value();
+  if (next) {
+    next();
+  }
+}
+schema.pre('save', _cleanupLists);
+
+schema.statics.screwWithTime = function (done) {
   var tasks;
 
   function _endTask() {
@@ -35,11 +46,13 @@ schema.static.screwWithTime = function (done) {
       return done(err);
     }
     if (!latest) {
+      console.log('no latest game');
       return done(null, 'no games exist to screw with');
     }
 
     var now = new Date();
     if (latest.date.getTime() < now.getTime()) {
+      console.log('no future games');
       return done(null, 'no games exist in the future');
     }
 
@@ -49,6 +62,7 @@ schema.static.screwWithTime = function (done) {
       var Players = require('./players');
       Players.find({}, function (err, players) {
         tasks = games.length + players.length;
+
         games.forEach(function (game) {
           game.date = new Date(game.date.getTime() + shift);
           game.markModified('date');
@@ -73,18 +87,20 @@ schema.methods.getPlayers = function (callback) {
 };
 
 schema.methods.updatePlayerRanks = function (done) {
+  var game = this;
+  this.save(function(){
 
   var tasks = 0;
-  function _endTask(){
+
+  function _endTask() {
     --tasks;
-    if (tasks <= 0 && done){
+    if (tasks <= 0 && done) {
       done();
       done = null;
     }
   }
 
-  var game = this;
-  this.getPlayers(function (err, players) {
+  game.getPlayers(function (err, players) {
     players.forEach(function (player) {
       if (!player.rank || isNaN(player.rank)) {
         player.rank = 1200;
@@ -116,11 +132,12 @@ schema.methods.updatePlayerRanks = function (done) {
       change.player.updateRank(change, _endTask);
     });
   });
+  }.bind(this));
 };
 
 function _namesToPlayers(nameStrings, index) {
   return nameStrings.map(function (name) {
-    if (!index[name]){
+    if (!index[name]) {
       throw new Error('no ' + name + ' in index ' + util.inspect(index));
     }
     return index[name];
