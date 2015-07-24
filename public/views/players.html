@@ -2,34 +2,61 @@
 Players</span></h1>
 <h1 hide-gt-md class="md-display-1" layout layout-align="center center"><span>
 Players</span></h1>
+<md-tabs md-dynamic-height md-border-bottom md-selected="0">
+  <md-tab label="Add a single player">
+    <md-card class="new-player-form">
+      <md-toolbar>
+        <h3 layout layout-align="center center" class="md-headline"><span>Add a player to the registry</span></h3>
+      </md-toolbar>
+      <md-card-content>
+        <form name="newPlayerForm" enctype="multipart/form-data">
+          <div layout layout-sm="column" layout-padding layout-fill>
+            <md-input-container flex style="max-width: 30rem">
+              <label>Name</label>
+              <input ng-model="newPlayer.name" required>
+            </md-input-container>
 
-<md-button ng-if="false" ng-click="purgePlayers()" class="md-raised md-warn">Destroy ALL Players</md-button>
+            <div flex="40">
+              <div>Avatar (optional)</div>
+              <avatar-upload></avatar-upload>
+            </div>
+          </div>
+        </form>
 
-<md-card class="new-player-form" style="max-width: 60rem">
-  <md-toolbar>
-    <h3 layout layout-align="center center" class="md-headline"><span>Add a player to the registry</span></h3>
-  </md-toolbar>
-  <md-card-content>
-    <form name="newPlayerForm" enctype="multipart/form-data">
-      <div layout layout-sm="column" layout-padding layout-fill>
-        <md-input-container flex style="max-width: 30rem">
-          <label>Name</label>
-          <input ng-model="newPlayer.name" required>
+        <p>note- you can tab over to add multiple players at once, above.</p>
+      </md-card-content>
+      <div class="md-actions" layout="row" layout-padding layout-align="end center">
+        <md-button class="md-raised md-primary" ng-click="addPlayer()">
+          Create Player
+        </md-button>
+      </div>
+    </md-card>
+  </md-tab>
+  <md-tab label="Add several players">
+    <form name="multiPlayerForm">
+      <md-toolbar>
+        <h3 layout layout-align="center center" class="md-headline"><span>Add mulitple players</span></h3>
+      </md-toolbar>
+      <md-card-content>
+        <p>Add multiple characters, seperated by commas or new lines</p>
+        <md-input-container flex>
+          <label>Characters</label>
+          <textarea ng-model="$parent.playersText" rows="5" columns="1"
+                    ng-change="$parent.updatePlayersText()"></textarea>
         </md-input-container>
+        <div>
 
-        <div flex="40">
-          <div>Avatar (optional)</div>
-          <avatar-upload></avatar-upload>
+          <md-chips ng-if="multiPlayers" ng-model="multiPlayers" readonly="ctrl.readonly"></md-chips>
         </div>
+      </md-card-content>
+      <div class="md-actions" layout="row" layout-padding layout-align="end center">
+        <md-button class="md-raised md-primary" ng-click="addPlayers()">
+          Create Players
+        </md-button>
       </div>
     </form>
-  </md-card-content>
-  <div class="md-actions" layout="row" layout-padding layout-align="end center">
-    <md-button class="md-raised md-primary" ng-click="addPlayer()">
-      Save Player
-    </md-button>
-  </div>
-</md-card>
+  </md-tab>
+</md-tabs>
 
 <md-list ng-if="players.length">
   <md-subheader class="md-no-sticky">Players</md-subheader>
@@ -44,3 +71,11 @@ Players</span></h1>
     </p>
   </md-list-item>
 </md-list>
+<md-card ng-if="players.length">
+  <md-card-content layout="row" layout-sm="column">
+    <div flex>Delete ALL PLAYERS and GAMES:</div>
+    <div flex="33">
+      <md-button class="md-primary md-raised md-warn" ng-click="destroyPlayers()">DELETE ALL PLAYERS</md-button>
+    </div>
+  </md-card-content>
+</md-card>

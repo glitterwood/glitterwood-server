@@ -1,4 +1,4 @@
-<h1 hide-sm hide-md class="md-display-3" layout layout-align="center center"><span>
+<h1 hide-sm hide-md class="md-display-3" layout layout-align="center center" xmlns="http://www.w3.org/1999/html"><span>
 Tournament</span></h1>
 <h1 hide-gt-md class="md-display-1" layout layout-align="center center"><span>
 Tournament</span></h1>
@@ -17,34 +17,72 @@ Tournament</span></h1>
 <md-content>
   <form>
     <div layout="column">
-      <div layout layout-padding style="overflow: hidden">
-        <div flex="10" layout layout-align="center center">
+      <div layout layout-padding style="overflow: hidden" layout-sm="column">
+        <div flex="10" layout layout-align="center center" flex-sm="100">
           <span class="md-body-1">Games</span>
         </div>
-        <md-slider flex min="0" max="100" ng-model="games" aria-label="games">
-        </md-slider>
-        <div flex="20" layout layout-align="center center">
-          <input type="number" ng-model="games">
+        <div flex>
+          <md-slider min="0" max="100" ng-model="gameCount" aria-label="games">
+          </md-slider>
+        </div>
+        <div flex="20" layout layout-align="center center" flex-sm="100">
+          <input type="number" ng-model="gameCount">
         </div>
       </div>
     </div>
 
-    <div layout layout-padding style="overflow: hidden">
-      <div flex="50">
-        <mdc-date-picker model="startDate" label="Start Date" />
+    <div layout layout-padding layout-sm="column" style="overflow: hidden">
+      <div flex="33" flex-sm="">
+        <mdc-date-picker model="startDate" label="Start Date"/>
       </div>
-      <div flex="50">
-        <mdc-date-picker model="endDate" label="End Date" />
+      <div flex="33" flex-sm="">
+        <mdc-date-picker model="endDate" label="End Date"/>
       </div>
     </div>
 
     <div layout layout-padding>
-      <div flex></div>
-      <div flex="20">
+      <div flex hide-sm></div>
+      <div flex="20" flex-sm="100">
         <md-button class="md-raised md-primary" ng-click="createGames()">
           Create Games
+        </md-button>
+      </div>
+      <div flex="20" flex-sm="100">
+        <md-button class="md-raised md-warn" ng-click="screwWithTime()">
+          Time Shift all games into the past.
         </md-button>
       </div>
     </div>
   </form>
 </md-content>
+
+
+<md-card layout-padding class="md-raised">
+
+  <img src="/images/back_to_the_future.png" class="md-card-image" alt="Washed Out">
+
+  <md-card-content>
+    <p>This page generates a set of games between the two points in the interface.
+      However <b><i>in order to not create time paradoxes it always starts after the last recorded game</i></b>.
+      Therefore it is a good idea to have the second date be some time in the future. </p>
+
+    <p><b>HOWEVER:</b> since the &quot;Record a Game&quot; system always records a game using the current time,
+      if you use this tournament page to generate a series of games in the future THEN record a single game in the present,
+      you can generate a discontinuity between yourself getting better in the future from tournament games
+      and having that rank (in a present game) and adjusting it (in the present) based on your (future adjusted) rank. </p>
+
+    <h3 class="md-headline">Fixing the Space Time Continuum</h3>
+
+    <p>You can fix this by shifting all games into the past (see the button above) -- but note that this will include
+      not only the games generated in the tournament but any games generated individually in the Record A Game
+      page. </p>
+
+    <p>The very lightly tested TimeShift button finds the latest games and shifts all game dates back
+      by the difference between the current date and the latest date. If any games are in the future, the latest game
+      will be now.
+      If no games are in the future no timeshifting occurs.</p>
+
+    <p>To properly timeshift, you must timeshift <B><i>after</i></B> you generate tournament games. Once you do that,
+    you can use individually added games based on the latest timeshifted game from the past. </p>
+  </md-card-content>
+</md-card>

@@ -1,0 +1,15 @@
+<div class="graph-frame">
+  <div class="graph-frame__inner" ng-style="{width: width + 'px', height: height + 'px'}">
+
+    <div class="graph-frame__graph"></div>
+    <h3 class="graph-frame__title md-headline" ng-style="{width: width}" layout="row" layout-align="center center" layout-padding><div>Players Progress</div></h3>
+    <div class="graph-frame__dates">{{ startDate | date: 'shortDate' }}</div>
+    <div class="graph-frame__dates graph-frame__dates--last">{{ endDate | date: 'shortDate' }}</div>
+  </div>
+  <div class="graph-frame__legend" ng-style="{width: width}" layout="row" layout-align="center center">
+    <div ng-repeat="player in players" ng-mouseover="hover(player)" ng-mouseleave="hover(player, true)"
+         class="graph-frame__legend-item" ng-style="{'background-color': player.color}">
+      {{ player.name }} <span class="rank">({{player.rank}})</span>
+    </div>
+  </div>
+</div>

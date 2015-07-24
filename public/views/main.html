@@ -2,3 +2,147 @@
 Lumiata Foosball Game Recorder</span></h1>
 <h1 hide-gt-md class="md-display-1" layout layout-align="center center"><span>
 Lumiata Foosball Game Recorder</span></h1>
+
+<div layout layout-align="center center">
+  <players-graph width="width" height="height" sizer="sizer"></players-graph>
+</div>
+
+<md-content layout-padding class="md-raised">
+  <h2 class="md-display-3">Welcome to Lumiata Foosball</h2>
+
+  <p>This site has the ability to record individual games as well as the ability to spawn mulitple games as a
+    simulation, under Tournament. </p>
+
+  <p>The site has buttons for deleting players and games en masse; plese don't.</p>
+
+  <p>You can add players individually or in a comma seperated list hidden under a tab in players.</p>
+
+  <h3 class="md-display-3">Generated or entered data</h3>
+
+  <p>This site can be used in one of two ways:</p>
+
+  <ol>
+    <li>Entering in games and players one by one as they are played.</li>
+    <li>Blasting a mess of simulated data into the repo using the Tournament page.</li>
+  </ol>
+
+  <p>The latter system will create records from the most recently entered game to some point (manually set) in the
+    future. Mixing future-projected games with manually entered games can create a mess
+    as explained in the tournament page.</p>
+
+  <p>Also a system that can work equally well in both cases,
+    you can enter in several player names at once using a text
+    field accessible through a tab in the players field. You can do this with real players, or with simulated
+    players.</p>
+
+  <h3 class="md-display-2">ELO resolution</h3>
+
+  <p>The game currently promotes or lowers everyone on the team as if they had beaten (or been beaten by) the best
+    player on the opposing team. </p>
+
+  <h3 class="md-display-2">Data Modelling</h3>
+
+  <p>Because the games span multiple players (and for validation/archival purposes, and graphing) the history of a
+    player's rank progress as affected by each game
+    is kept in an array in the players' records. the player's schema is:</p>
+
+  <pre>
+var schema = new mongoose.Schema({
+  name: {type: 'string', index: {unique: true}},
+  rank: {type: 'number', default: 1200},
+  avatar: {type: 'buffer'},
+  games: [
+    {
+      game: mongoose.Schema.Types.ObjectId,
+      oldRank: 'number',
+      newRank: 'number',
+      date: {type: Date, default: Date.now},
+      won: 'boolean'
+    }
+  ]
+});
+  </pre>
+
+  <p>additionally, games are recorded using the players' name (though honestly it would have been better to use
+    IDs): </p>
+
+  <pre>
+var schema = new mongoose.Schema({
+  date: {type: Date, default: Date.now},
+  team1: ['string'],
+  team2: ['string'],
+  players: ['string'],
+  winner: 'number'
+});
+  </pre>
+
+  <p>witht the teams and players being the names of the players. players is the sum of team1 and team2, used as a lookup
+    index. Winner is 1 or 2.</p>
+
+  <p>there is incomplete work on player avatars; they can be uploaded and stored but are not present in the UI,</p>
+
+  <h3 class="md-display-2">Local Installation</h3>
+
+  <p>This site is actually a hybrid of two repositories. One is an Angular-generator based engine for static Angular
+    generation. The other site is a node proxy for MongoLabs. </p>
+
+  <p>To get the sites to load and view properly you must put your etc.hosts file to read localhost as <code>http://lumiata-foosball.com/</code>
+    and load that url in the browser.</p>
+
+  <p>The node site must be loaded to proxy for MongoLabs. </p>
+
+  <p>In production (on Heroku) the angular site is published and copied into the Nodes' static directories which on
+    heroku use the local express endpoints as rest gateways to MongoLabs.</p>
+
+  <p>The Express site does extensive business logic behind updating games and players, via Mongoose instance
+    methods. </p>
+
+  <h4 class="md-headline">The Angular Generated Site</h4>
+
+  <p>The Angular code is a product of the angular generator;
+    it is on github at <a href="https://github.com/bingomanatee/lumiata-foosball" target="_blank">https://github.com/bingomanatee/lumiata-foosball</a>.
+    To run it you will need:</p>
+  <ol>
+    <li>Yeoman</li>
+    <li> Node</li>
+    <li>Bower</li>
+    <li>Compass</li>
+    <li>SASS</li>
+    <li>Grunt</li>
+  </ol>
+  <p>You will NOT need mongo because it uses MongoLabs as a remove service -- though you WILL need the node server (see
+    below).</p>
+
+  <p>Once installed, you can use the <code>grunt serve</code> command line to run it locally. However it will try to
+    serve it through the localhost url and in that situation
+    it won't be able to connect to mongolabs. To run it locally you must remap <code>http://lumiata-foosball.com</code>
+    in <code>/etc/hosts</code> to localhost.</p>
+
+  <p>Also, before running the angular site the node site must be initialized and run locally. </p>
+
+  <h4 class="md-headline">The Node Site</h4>
+
+  <p>The node site is hosted on heroku and can be run locally. In fact you can run the node site and get the full
+    experience without hosting the angular site. Its code is on github at
+    <a href="https://github.com/bingomanatee/lumiata-foosball-server" target="_blank">https://github.com/bingomanatee/lumiata-foosball-server</a>
+  </p>
+
+  <p>To run the node site you will only need node installed locally, and to do the usuall <code>npm install</code>
+    inside its source directory.
+    The angular dev site needs node to run but the node side is not dependant on tha angular side.
+    The node site is executable through <code>node index.js</code> in its root.</p>
+
+  <p>The node site contains a compressed build of the angular site in its public folder. There is no magic sync to that
+    - its manual -- so it might get out of date.</p>
+
+  <p>It is pushed to Heroku. You can run the site purely off a local install of the node site (which is good because it
+    has fewer technical prereqs) but the serverside code will be obfuscated and harder to trace through. </p>
+
+  <h4 class="md-headline">Tests</h4>
+
+  <p>The Angular site has no useful tests. The node site has model tests; for it to work you must have mongo up and
+    running and a <code>lumiata-test</code> database.</p>
+
+  <p> the tests are mocha and you must have mocha and expect.js installed globally; then type <code>mocha tests/</code>
+    in the node root.</p>
+</md-content>
