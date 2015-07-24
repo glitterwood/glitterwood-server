@@ -1,0 +1,50 @@
+<h1 hide-sm hide-md class="md-display-3" layout layout-align="center center"><span>
+Tournament</span></h1>
+<h1 hide-gt-md class="md-display-1" layout layout-align="center center"><span>
+Tournament</span></h1>
+
+<md-content layout-padding>
+  <p>Simulate a series of games by randomly matching and determining winners and losers</p>
+</md-content>
+
+<md-toolbar md-scroll-shrink>
+  <div class="md-toolbar-tools">
+    <h3>
+      <span>Create Game Series</span>
+    </h3>
+  </div>
+</md-toolbar>
+<md-content>
+  <form>
+    <div layout="column">
+      <div layout layout-padding style="overflow: hidden">
+        <div flex="10" layout layout-align="center center">
+          <span class="md-body-1">Games</span>
+        </div>
+        <md-slider flex min="0" max="100" ng-model="games" aria-label="games">
+        </md-slider>
+        <div flex="20" layout layout-align="center center">
+          <input type="number" ng-model="games">
+        </div>
+      </div>
+    </div>
+
+    <div layout layout-padding style="overflow: hidden">
+      <div flex="50">
+        <mdc-date-picker model="startDate" label="Start Date" />
+      </div>
+      <div flex="50">
+        <mdc-date-picker model="endDate" label="End Date" />
+      </div>
+    </div>
+
+    <div layout layout-padding>
+      <div flex></div>
+      <div flex="20">
+        <md-button class="md-raised md-primary" ng-click="createGames()">
+          Create Games
+        </md-button>
+      </div>
+    </div>
+  </form>
+</md-content>

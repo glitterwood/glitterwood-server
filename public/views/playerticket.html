@@ -1,7 +1,8 @@
 <h1 hide-sm hide-md class="md-display-3" layout layout-align="center center"><span>
-Player &quot;{{ player.name }}&quot;</span></h1>
+Player &quot;{{ player.name }}&quot; </span></h1>
 <h1 hide-gt-md class="md-display-1" layout layout-align="center center"><span>
 Player &quot;{{ player.name}}&quot;</span></h1>
+
 
 <md-content class="md-whiteframe-z3 player-ticket">
   <div layout="column" layout-padding>
@@ -9,12 +10,20 @@ Player &quot;{{ player.name}}&quot;</span></h1>
       <div class="label" flex="20"><b>Name</b></div>
       <div flex>{{player.name}}</div>
     </div>
+    <div layout="row" layout-padding>
+      <div class="label" flex="20"><b>ID</b></div>
+      <div flex>{{playerid}}</div>
+    </div>
 
     <div layout="row" layout-padding>
       <div flex="20" class="label"><b>Rank</b></div>
       <div flex>{{player.rank}}</div>
     </div>
   </div>
+  <div layout layout-align="center center">
+    <player-graph ng-attr-playerid="playerid" width="600" height="300"></player-graph>
+  </div>
+
   <md-toolbar>
     <div class="md-toolbar-tools">
       <h3><span>Game History</span></h3>
