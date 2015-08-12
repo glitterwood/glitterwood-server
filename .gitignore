@@ -2,3 +2,9 @@ node_modules
 .env
 
 /.idea/
+
+/apiKey-1FMNH27B580VUY5J0OAA6GSFS.properties
+
+/stormpath.json
+
+/mongodb.keys.json

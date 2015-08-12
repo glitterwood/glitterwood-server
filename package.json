@@ -4,7 +4,8 @@
   "description": "A sample Node.js app using Express 4",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "mocha tests/*"
   },
   "dependencies": {
     "arpad": "^0.1.0",
@@ -14,7 +15,8 @@
     "express": "~4.9.x",
     "lodash": "^3.10.0",
     "mongoose": "^4.0.8",
-    "multer": "^1.0.1"
+    "multer": "^1.0.1",
+    "stormpath": "^0.10.2"
   },
   "engines": {
     "node": "0.12.2"
