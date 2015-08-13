@@ -20,12 +20,37 @@ router.post('/', function (req, res) {
     data = JSON.parse(data);
   }
 
+  if (!req.user){
+    return res.status(400).send({error: 'user not logged in'});
+  }
+
+  data.creator = req.user.href;
+
   new Games(data).save(function (err, result) {
     if (err) {
       return res.status(400).send({error: 'bad data'});
     }
     res.send(result);
   })
+});
+
+router.get('/:id/people/:creator', function(req, res){
+  var People = require('./../models/people');
+  var id = req.params.id;
+  var creator = req.params.creator;
+
+  if (!id || !creator){
+    res.status(400).send({error: 'missing id or creator'});
+  } else {
+    People.find({game: id, creator: creator}, function(err, people){
+      if (err){
+        res.status(400).send(err);
+      } else {
+        res.send(people);
+      }
+    });
+  }
+
 });
 
 router.get('/:id', function (req, res) {
@@ -50,8 +75,12 @@ router.get('/:id', function (req, res) {
 });
 
 router.get('/', function (req, res) {
+  var q = {};
   console.log('getting all games');
-  Games.find({}, function (err, games) {
+  if (req.query.creator){
+    q.creator = req.query.creator;
+  }
+  Games.find(q, function (err, games) {
     if (err) {
       return res.status(500).send({error: 'bad data'});
     }

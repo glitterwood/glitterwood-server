@@ -1,12 +1,10 @@
-<!doctype html> <html> <head> <meta charset="utf-8"> <title></title> <meta name="description" content=""> <meta name="viewport" content="width=device-width"> <!-- Place favicon.ico and apple-touch-icon.png in the root directory --> <link rel="stylesheet" href="styles/vendor.686db304.css"> <link rel="stylesheet" href="styles/main.660e84f4.css"> </head> <body ng-app="lumiataFoosballApp" layout="column" ng-controller="AppCtrl"> <!--[if lte IE 8]>
+<!doctype html> <html> <head> <meta charset="utf-8"> <title></title> <meta name="description" content=""> <meta name="viewport" content="width=device-width"> <!-- Place favicon.ico and apple-touch-icon.png in the root directory --> <link rel="stylesheet" href="styles/main.82c344df.css"> </head> <body ng-app="App"> <!--[if lte IE 8]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
   your browser</a> to improve your experience.</p>
-<![endif]--> <!-- Add your site or application content here --> <md-toolbar hide-gt-md> <div class="md-toolbar-tools"> <md-button class="md-icon-button" ng-click="toggleLeft()" aria-label="Settings"> <i class="fa fa-ellipsis-v"></i> </md-button> <h2> <span>Lumiata-foosball</span> </h2> <span flex></span> </div> </md-toolbar> <section flex layout="row"> <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')"> <md-toolbar class="md-theme-indigo"> <h1 class="md-toolbar-tools">Sidenav Left</h1> </md-toolbar> <md-content layout-padding ng-controller="LeftCtrl"> <md-button ng-click="close()" class="md-primary" hide-gt-md> Close Sidenav Left </md-button> <md-list> <md-list-item> <md-button href="#/" ng-click="close()">Home</md-button> </md-list-item> <md-list-item> <md-button href="#players" ng-click="close()">Players</md-button> </md-list-item> <md-list-item> <md-button href="#game" ng-click="close()">Record a Game</md-button> </md-list-item> <md-list-item> <md-button href="#history" ng-click="close()">History</md-button> </md-list-item> <md-list-item> <md-button href="#tournament" ng-click="close()">Tournament</md-button> </md-list-item> </md-list> </md-content> </md-sidenav> <div ng-view="" class="view-frame" flex></div> </section> <!-- Google Analytics: change UA-XXXXX-X to be your site's ID --> <script>!function (A, n, g, u, l, a, r) {
-    A.GoogleAnalyticsObject = l, A[l] = A[l] || function () {
-        (A[l].q = A[l].q || []).push(arguments)
-      }, A[l].l = +new Date, a = n.createElement(g),
-      r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
-  }(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+<![endif]--> <!-- Add your site or application content here --> <header> <h1>Glitterwood</h1> </header> <section ng-view=""></section> <footer> &copy;2015 Wonderland Labs all rights reversed </footer> <!-- Google Analytics: change UA-XXXXX-X to be your site's ID --> <script language="bogusLanguage">!function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
+       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
+       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
+       }(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-XXXXX-X');
-  ga('send', 'pageview');</script> <script src="scripts/vendor.da5d149f.js"></script> <script src="scripts/scripts.f758c51e.js"></script> </body> </html>
+       ga('create', 'UA-XXXXX-X');
+       ga('send', 'pageview');</script> <script src="scripts/vendor.6d68bf7e.js"></script> <script src="scripts/scripts.ab41ca3f.js"></script> </body> </html>

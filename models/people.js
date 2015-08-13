@@ -13,7 +13,8 @@ var schema = new mongoose.Schema({
   friendly: 'number',
   age: 'number',
   gender: {type: 'string', enum: ['m', 'f', '?']},
-  playable: {type: 'boolean', default: 'false'}
+  playable: {type: 'boolean', default: 'false'},
+  creator: 'string'
 });
 
 schema.pre('save', function(next){
