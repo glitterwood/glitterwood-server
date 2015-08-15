@@ -3,7 +3,11 @@ var mongoose = require('mongoose');
 var Games = require('./../models/games');
 var _ = require('lodash');
 
-mongoose.connect('mongodb://localhost/mongoose-test');
+try {
+  mongoose.connect('mongodb://localhost/glitterwood-test');
+} catch(err){
+  console.log('mongoose already open');
+}
 
 describe('games', function (done) {
 

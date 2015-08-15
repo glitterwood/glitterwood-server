@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "arpad": "^0.1.0",
+    "async": "^1.4.2",
     "body-parser": "^1.13.2",
     "cors": "^2.7.1",
     "ejs": "^2.3.1",
