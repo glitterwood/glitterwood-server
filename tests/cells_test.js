@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 
 try {
   mongoose.connect('mongodb://localhost/glitterwood-test');
-} catch(err){
+} catch (err) {
   console.log('mongoose already open');
 }
 
@@ -19,7 +19,6 @@ function _cellToObj(child) {
   delete out._id;
   return out;
 }
-
 
 describe('Cell', function () {
 
@@ -95,22 +94,22 @@ describe('Cell', function () {
 
       beforeEach(function (done) {
 
-        function finish(){
+        function finish() {
           setTimeout(done, 100);
         }
 
-        root.eachByDepth(function(cell, cb){
+        root.eachByDepth(function (cell, cb) {
           absCoordinates.push({ai: cell.absIoffset, aj: cell.absJoffset, depth: cell.depth, i: cell.i, j: cell.j});
           cb();
         }, finish);
       });
 
-      it('should have a lot of coordinates', function(){
-        absCoordinates = _.sortBy(absCoordinates, function(c){
+      it('should have a lot of coordinates', function () {
+        absCoordinates = _.sortBy(absCoordinates, function (c) {
           return 100000 * c.depth + c.ai * 1000 + c.aj;
         });
 
-        expect(absCoordinates.length).to.be(1 + 4 * 4  + 4 * 4 * 2 * 2);
+        expect(absCoordinates.length).to.be(1 + 4 * 4 + 4 * 4 * 2 * 2);
         expect(absCoordinates).to.eql(require('./../test_expectations/recurse2.json').coordinates);
       });
 
@@ -230,6 +229,34 @@ describe('Cell', function () {
       });
     });
 
+  });
+
+  describe('#terrain', function () {
+
+    var root;
+
+    var prIndex = 1;
+
+    function pseudoRandom() {
+      prIndex *= 1.5;
+      prIndex %= 1000;
+      return (prIndex % 10) / 10;
+    };
+
+    beforeEach(function (done) {
+
+      Cell.collection.remove({}, function () {
+        done();
+      });
+    });
+
+    beforeEach(function (done) {
+      root.divide([5, 5, 6], done);
+    });
+
+    beforeEach(function (done) {
+      root.rumple({randomizer: pseudoRandom}, done);
+    });
   });
 
 });

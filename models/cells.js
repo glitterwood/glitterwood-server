@@ -27,7 +27,10 @@ var schema = new mongoose.Schema({
   absFraction: 'number', // the denominator at the current scale
   parent: {type: mongoose.Schema.ObjectId, ref: 'cells'},
   root: {type: mongoose.Schema.ObjectId, ref: 'cells'},
-  depth: 'number'
+  depth: 'number',
+
+  localHeight: 'number',
+  absHeight: 'number'
 });
 
 schema.methods.children = function (callback) {
@@ -36,6 +39,59 @@ schema.methods.children = function (callback) {
 
 schema.methods.getDepth = function (depth, callback) {
   Cells.find({root: this.root, depth: depth}).sort({localIoffset: 'asc', localJoffset: 'asc'}).exec(callback);
+};
+schema.methods.getDepthStream = function (depth) {
+  return Cells.find({root: this.root, depth: depth}).sort({localIoffset: 'asc', localJoffset: 'asc'}).stream();
+};
+
+schema.methods.getCellsAtDepth = function (rootId, depth, callback) {
+  Cells.findById(rootId, function (err, root) {
+    root.getDepth(depth, callback);
+  });
+};
+
+schema.methods.getCellsAtDepthStream = function (rootId, depth, callback) {
+  Cells.findById(rootId, function (err, root) {
+    callback(null,root.getDepthStream(depth));
+  });
+};
+
+schema.methods.rumple = function (params, done) {
+  if (!params.randomizer) {
+    params.randomizer = function () {
+      return Math.random();
+    }
+  }
+  if (!params.depthScale) {
+    params.depthScale = 1.5;
+  }
+
+  schema.methods.eachByDepth(function (cell, cb) {
+    var rand = params.randomizer();
+    if (rand > 0.75) {
+      cell.localHeight = 1;
+    } else if (rand < 0.25) {
+      cell.localHeight = -1;
+    } else {
+      cell.localHeight = 0;
+    }
+    ;
+    if (cell.depth === 0) {
+      cell.absHeight = cell.localHeight;
+    }
+    cell.save(cb);
+  }, function () {
+    schema.methods.eachByDepth(function (cell, cb2) {
+      if (cell.depth > 0) {
+        cell.populate('parent');
+        var localToAbs = cell.localHeight / Math.pow(params.depthScale, (cell.depth));
+        cell.absHeight = cell.parent.absHeight + localToAbs;
+        cell.save(cb2);
+      } else {
+        cb2();
+      }
+    }, done);
+  });
 };
 
 /**
@@ -105,11 +161,11 @@ schema.methods.eachByDepth = function (fn, done, recursed) {
 schema.methods.divide = function (fraction, done) {
   var subFraction;
 
-  if (_.isArray(fraction)){
+  if (_.isArray(fraction)) {
     if (fraction.length > 1) {
       subFraction = fraction.slice(1);
       fraction = fraction[0];
-    } else if (fraction.length < 1){
+    } else if (fraction.length < 1) {
       return done();
     }
   }
